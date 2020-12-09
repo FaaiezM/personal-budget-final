@@ -123,6 +123,10 @@
               "devServerTarget": "personal-budget:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }

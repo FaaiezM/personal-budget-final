@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "personal-budget-final-1deff": {
+      "hosting": {
+        "personal-budget": [
+          "personal-budget-final-1deff"
+        ]
+      }
+    }
+  }
+}
