@@ -9,42 +9,45 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
-import { DoughnutComponent } from './doughnut/doughnut.component';
+import { AnnualSavingsComponent } from './annual-savings/annual-savings.component';
+import { MonthlyBudgetComponent } from './monthly-budget/monthly-budget.component';
+import { MonthlySpendingComponent } from './monthly-spending/monthly-spending.component';
 
 import { AuthService } from './auth/auth.service';
+import { environment } from '../environments/environment';
+import { AngularFireDatabase } from '@angular/fire/database';
 
-var firebaseConfig = {
-  apiKey: "AIzaSyBc7umr1Uiu7dxpgLAZwLgghianL92-XGQ",
-  authDomain: "personal-budget-final-1deff.firebaseapp.com",
-  projectId: "personal-budget-final-1deff",
-  storageBucket: "personal-budget-final-1deff.appspot.com",
-  messagingSenderId: "691091947321",
-  appId: "1:691091947321:web:fc78d8ef444172f93232e8",
-  measurementId: "G-TJPDL74G2Q"
-};
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     HomeComponent,
-    DoughnutComponent,
+    AnnualSavingsComponent,
+    MonthlyBudgetComponent,
+    MonthlySpendingComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ChartsModule,
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatTabsModule,
+    MatIconModule,
+    MatCardModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

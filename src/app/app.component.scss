@@ -2,3 +2,35 @@
     color: red;
 }
 
+ul {
+    list-style-type: none;
+}
+
+.login-container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-card {
+    max-width: 400px;
+    mat-form-field {
+        width: 75%;
+    }
+
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, .5fr) 1fr .5fr 1fr repeat(2, .5fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    }
+
+    .div1 { grid-area: 1 / 1 / 2 / 4; }
+    .div2 { grid-area: 3 / 2 / 4 / 3; }
+    .div3 { grid-area: 5 / 1 / 6 / 4; }
+    .div4 { grid-area: 5 / 1 / 6 / 2; }
+    .div5 { grid-area: 5 / 2 / 6 / 3; }
+    .div6 { grid-area: 5 / 3 / 6 / 4; }
+    .div7 { grid-area: 7 / 1 / 8 / 4; }

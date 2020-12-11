@@ -10,7 +10,8 @@ export class AppComponent {
   title = 'personal-budget';
   email: string;
   password: string;
-
+  // Hides password
+  hide = true;
 
   constructor(public authService: AuthService) {
   }

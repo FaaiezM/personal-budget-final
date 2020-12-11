@@ -9,40 +9,62 @@
     <h1>Welcome: {{ (authService.user | async)?.email }}!</h1>
   <h1>Dashboard</h1>
 
+    <!-- Tabs with Charts -->
+    <mat-tab-group color="accent" backgroundColor="primary" mat-align-tabs="center">
+      <mat-tab label="Monthly"> <pb-monthly-chart></pb-monthly-chart> </mat-tab>
+      <mat-tab label="Goals"> <pb-goals-chart></pb-goals-chart> </mat-tab>
+      <mat-tab label="Third"> Content 3 </mat-tab>
+    </mat-tab-group>
 
   </div>
 
 
 
 <!-- this div displays only when user is not-logged-in -->
-<div *ngIf="!(authService.user | async)">
+<div *ngIf="!(authService.user | async)" class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Login</mat-card-title>
+    </mat-card-header>
 
-      <!-- these input fields takes email and password from user -->
-
-
-      <mat-form-field appearance="fill">
-        <mat-label>Username</mat-label>
-        <input matInput type="text" [(ngModel)]="email" placeholder="Enter email" required/>
-      </mat-form-field>
-
+    <mat-card-content>
+      <ul>
+        <li>
+          <!-- Email Input -->
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput type="text" [(ngModel)]="email" required/>
+          </mat-form-field>
+        </li>
+        <li>
+          <!-- Password Input -->
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
-        <input matInput type="password" [(ngModel)]="password" placeholder="Enter password" required/>
+        <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="password" required>
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
       </mat-form-field>
-
-      <!-- user click this button to signup -->
-      <button mat-raised-button color="basic" (click)="signup()" [disabled]="!email || !password">
-        Signup
-      </button>
-
-      <!-- user click this button to login -->
-      <button mat-raised-button color="primary" (click)="login()" [disabled]="!email || !password">
-        Login
-      </button>
+        </li>
+      </ul>
 
       <div *ngIf="authService.errMsg.length" class="error">
         {{authService.errMsg}}
       </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <!-- Signup Button -->
+      <button mat-raised-button color="accent" (click)="signup()" [disabled]="!email || !password">
+        Signup
+      </button>
+
+      <!-- Login Button -->
+      <button mat-raised-button color="primary" (click)="login()" [disabled]="!email || !password">
+        Login
+      </button>
+    </mat-card-actions>
+    </mat-card>
 </div>
 
 </div>
