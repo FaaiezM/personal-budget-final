@@ -1,33 +1,48 @@
 <div>
+    <!-- user click this button to logout -->
+    <!-- this button displays only when user is logged-in -->
+    <button mat-raised-button color="warn" (click)="logout()" *ngIf="authService.user | async">
+      Logout
+    </button>
   <!-- this header tag displays only when user is logged-in -->
-  <h1 *ngIf="authService.user | async">
-    Welcome User: {{ (authService.user | async)?.email }}!
-  </h1>
+  <div *ngIf="authService.user | async">
+    <h1>Welcome: {{ (authService.user | async)?.email }}!</h1>
+  <h1>Dashboard</h1>
+
+
+  </div>
+
+
 
 <!-- this div displays only when user is not-logged-in -->
 <div *ngIf="!(authService.user | async)">
+
       <!-- these input fields takes email and password from user -->
-      <input type="text" [(ngModel)]="email" placeholder="Enter email"/>
-      <input type="password" [(ngModel)]="password" placeholder="Enter password"/>
+
+
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" [(ngModel)]="email" placeholder="Enter email" required/>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="password" placeholder="Enter password" required/>
+      </mat-form-field>
 
       <!-- user click this button to signup -->
-      <button (click)="signup()" [disabled]="!email || !password">
+      <button mat-raised-button color="basic" (click)="signup()" [disabled]="!email || !password">
         Signup
       </button>
 
       <!-- user click this button to login -->
-      <button (click)="login()" [disabled]="!email || !password">
+      <button mat-raised-button color="primary" (click)="login()" [disabled]="!email || !password">
         Login
       </button>
+
+      <div *ngIf="authService.errMsg.length" class="error">
+        {{authService.errMsg}}
+      </div>
 </div>
 
-  <!-- user click this button to logout -->
-  <!-- this button displays only when user is logged-in -->
-  <button (click)="logout()" *ngIf="authService.user | async">
-    Logout
-  </button>
 </div>
-
-<!-- <div *ngIf="errMsg">
-  {{errMsg}}
-</div> -->

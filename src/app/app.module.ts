@@ -5,13 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { FormsModule } from '@angular/forms';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { DoughnutComponent } from './doughnut/doughnut.component';
-import { LoginComponent } from './login/login.component';
 
 import { AuthService } from './auth/auth.service';
 
@@ -31,7 +33,6 @@ var firebaseConfig = {
     MenuComponent,
     HomeComponent,
     DoughnutComponent,
-    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +40,11 @@ var firebaseConfig = {
     ChartsModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
-    FormsModule
+    FormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BrowserAnimationsModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

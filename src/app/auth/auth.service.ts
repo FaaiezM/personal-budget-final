@@ -7,11 +7,12 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   user: Observable<firebase.default.User>;
-  errMsg: any;
+  public errMsg: any = '';
 
   constructor(private firebaseAuth: AngularFireAuth) {
     this.user = firebaseAuth.authState;
   }
+
 
   signup(email: string, password: string) {
     this.firebaseAuth
@@ -21,7 +22,7 @@ export class AuthService {
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
-        this.errMsg = err;
+        this.errMsg = err.message;
       });
   }
 
@@ -33,6 +34,7 @@ export class AuthService {
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
+        this.errMsg = err.message;
       });
   }
 
