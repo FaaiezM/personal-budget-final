@@ -22,9 +22,8 @@ import { MonthlyBudgetComponent } from './monthly-budget/monthly-budget.componen
 import { MonthlySpendingComponent } from './monthly-spending/monthly-spending.component';
 
 import { AuthService } from './auth/auth.service';
-import AnnualSavings from './models/annual-savings';
+import { AnnualSavings } from './models/annual-savings';
 import { environment } from '../environments/environment';
-import { AddAnnualSavingsComponent } from './add-annual-savings/add-annual-savings.component';
 import { AnnualSavingsListComponent } from './annual-savings-list/annual-savings-list.component';
 
 
@@ -37,7 +36,6 @@ import { AnnualSavingsListComponent } from './annual-savings-list/annual-savings
     AnnualSavingsComponent,
     MonthlyBudgetComponent,
     MonthlySpendingComponent,
-    AddAnnualSavingsComponent,
     AnnualSavingsListComponent
   ],
   imports: [

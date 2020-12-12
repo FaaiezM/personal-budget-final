@@ -1,23 +1,29 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
-import AnnualSavings from '../models/annual-savings';
 import { AuthService }  from '../auth/auth.service';
+import { AnnualSavings } from '../models/annual-savings';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnnualSavingsService {
 
-  private userID = this.authService.currentUserID;
+  private userID = this.authService.getUid();
   private dbPath = '/data/' + this.userID + '/annualSavings';
 
   annualSavingsRef: AngularFireList<AnnualSavings> = null;
 
   constructor(private db: AngularFireDatabase, private authService: AuthService) {
-    this.annualSavingsRef = db.list(this.dbPath);
     this.authService = authService;
     console.log(this.userID);
+    this.db = db;
     console.log(this.dbPath);
+  }
+
+  public initDBPath(): void {
+    console.log(this.userID);
+    this.annualSavingsRef = this.db.list(this.dbPath);
+    console.log(this.userID);
   }
 
   public getAll(): AngularFireList<AnnualSavings> {

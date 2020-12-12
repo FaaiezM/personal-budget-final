@@ -12,13 +12,11 @@ export class AuthService {
   private uid : string;
 
   getUid(): string {
-    return this.uid;
+    return localStorage.getItem('uid');
   }
 
   constructor(private firebaseAuth: AngularFireAuth) {
     this.user = firebaseAuth.authState;
-    console.log(this.user.subscribe(user =>
-      this.uid = user.uid));
   }
 
   signup(email: string, password: string) {
@@ -38,18 +36,18 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then((value) => {
         console.log(value);
+        this.uid = value.user.uid;
         localStorage.setItem("uid", value.user.uid);
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
         this.errMsg = err.message;
-
       });
-
   }
 
   logout() {
     this.firebaseAuth.signOut();
+    localStorage.clear();
   }
 
   get isAuthenticated(): boolean {

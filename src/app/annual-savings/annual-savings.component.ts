@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { AnnualSavingsService } from '../services/annual-savings.service';
-import AnnualSavings from '../models/annual-savings'
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { AnnualSavings } from '../models/annual-savings';
 
 @Component({
   selector: 'pb-annual-savings',
@@ -12,8 +13,8 @@ import { map } from 'rxjs/operators';
 })
 export class AnnualSavingsComponent implements OnInit {
 
-  annualSavings: AnnualSavings[];
-
+  annualSavings: Observable<AnnualSavings[]>;
+  data = [];
   barChartOptions: ChartOptions = {
     responsive: true,
     scales: { xAxes: [{}], yAxes: [{}] },
@@ -38,16 +39,20 @@ export class AnnualSavingsComponent implements OnInit {
   }
 
   retrieveAnnualSavings(): void {
-    this.annualSavingsService.getAll().snapshotChanges().pipe(
-      map(changes =>
-        changes.map(c =>
-          ({ key: c.payload.key, ...c.payload.val() })
-        )
-      )
-    ).subscribe(data => {
-      console.log(data);
-      this.annualSavings = data;
-    });
+    this.annualSavingsService.initDBPath();
+    this.annualSavingsService.getAll().valueChanges()
+    .subscribe((data) => { this.data = data; });
+    console.log(this.data);
+    // .pipe(
+    //   map(changes =>
+    //     changes.map(year =>
+    //       ({ key: year.payload.key, ...year.payload.val() })
+    //     )
+    //   )
+    // )
+    // .subscribe(data => {
+    //   this.annualSavings = data;
+    // });
   }
 
 }
