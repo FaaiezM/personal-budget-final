@@ -1,0 +1,33 @@
+<div class="submit-form">
+    <div *ngIf="!submitted">
+      <div class="form-group">
+        <label for="year">Year</label>
+        <input
+          type="text"
+          class="form-control"
+          id="year"
+          required
+          [(ngModel)]="annualSavings.year"
+          name="year"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="savings">Savings</label>
+        <input
+          class="form-control"
+          id="savings"
+          required
+          [(ngModel)]="annualSavings.savings"
+          name="savings"
+        />
+      </div>
+
+      <button (click)="saveAnnualSavings()" class="btn btn-success">Submit</button>
+    </div>
+
+    <div *ngIf="submitted">
+      <h4>You submitted successfully!</h4>
+      <button class="btn btn-success" (click)="newAnnualSavings()">Add</button>
+    </div>
+  </div>

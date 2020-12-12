@@ -1,5 +1,5 @@
 export default class AnnualSavings {
-    uid: string;
+    key: string;
     year: number;
     savings: number;
   }

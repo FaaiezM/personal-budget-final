@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,8 +22,11 @@ import { MonthlyBudgetComponent } from './monthly-budget/monthly-budget.componen
 import { MonthlySpendingComponent } from './monthly-spending/monthly-spending.component';
 
 import { AuthService } from './auth/auth.service';
+import AnnualSavings from './models/annual-savings';
 import { environment } from '../environments/environment';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AddAnnualSavingsComponent } from './add-annual-savings/add-annual-savings.component';
+import { AnnualSavingsListComponent } from './annual-savings-list/annual-savings-list.component';
+
 
 
 @NgModule({
@@ -32,7 +36,9 @@ import { AngularFireDatabase } from '@angular/fire/database';
     HomeComponent,
     AnnualSavingsComponent,
     MonthlyBudgetComponent,
-    MonthlySpendingComponent
+    MonthlySpendingComponent,
+    AddAnnualSavingsComponent,
+    AnnualSavingsListComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +46,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
     ChartsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
+    AngularFireDatabaseModule,
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,

@@ -13,6 +13,8 @@ export class AppComponent {
   // Hides password
   hide = true;
 
+  budget = null;
+
   constructor(public authService: AuthService) {
   }
 
@@ -29,4 +31,21 @@ export class AppComponent {
   logout() {
     this.authService.logout();
   }
+
+  // create fx to firestore to save data
+  // take reference of medium article to create
+  // create variable that take all values
+  // create object that takes all values
+
+  // addData () {
+  //   this.budget={
+  //     monthlySpending: {
+
+  //     }
+
+  //   }
+  // }
+
+  // ngOnInit(): void {
+  // }
 }
