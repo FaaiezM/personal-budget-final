@@ -8,3 +8,23 @@
         [chartType]="barChartType">
     </canvas>
 </div>
+
+<!-- Submit Data Form-->
+<form [formGroup]="annualSavingsForm">
+    <mat-label>Add</mat-label>
+    <mat-form-field>
+        <mat-label>Year</mat-label>
+        <input matInput formControlName="year" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Amount Saved</mat-label>
+        <input matInput formControlName="savings" required>
+    </mat-form-field>
+</form>
+
+
+
+<!-- <pre>
+{{ barChartData | json }}
+</pre> -->

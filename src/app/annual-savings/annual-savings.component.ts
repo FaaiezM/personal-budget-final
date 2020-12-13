@@ -1,58 +1,97 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { AnnualSavingsService } from '../services/annual-savings.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AnnualSavings } from '../models/annual-savings';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { Action } from '@ngrx/store';
 
 @Component({
   selector: 'pb-annual-savings',
   templateUrl: './annual-savings.component.html',
-  styleUrls: ['./annual-savings.component.scss']
+  styleUrls: ['./annual-savings.component.scss'],
 })
 export class AnnualSavingsComponent implements OnInit {
+  annualSavingsList: Observable<any[]>;
 
-  annualSavings: Observable<AnnualSavings[]>;
-  data = [];
+
+  annualSavingsForm: FormGroup;
+
   barChartOptions: ChartOptions = {
     responsive: true,
-    scales: { xAxes: [{}], yAxes: [{}] },
+    scales: { xAxes: [{}], yAxes: [{ticks: {
+      beginAtZero: true
+    }}] },
   };
-  barChartLabels: Label[] = ['2013', '2014', '2015', '2016', '2017', '2018'];
+  barChartLabels: Label[] = [];
   barChartType: ChartType = 'bar';
   barChartLegend = true;
   barChartPlugins = [];
 
-  barChartData: ChartDataSets[] = [
-    { data: [2500, 5900, 6000, 8100, 8600, 8050, 1200], label: 'Company A' },
-    { data: [2800, 4800, 4000, 7900, 9600, 8870, 1400], label: 'Company B' }
-  ];
+  barChartData: ChartDataSets[] = [{ data: [], label: 'Amount Saved' }];
 
-
-  constructor(private annualSavingsService: AnnualSavingsService) {
+  constructor(private annualSavingsService: AnnualSavingsService, private fb: FormBuilder) {
     this.annualSavingsService = annualSavingsService;
+    this.annualSavingsList = this.annualSavingsService
+      .getAll()
+      .snapshotChanges();
   }
 
   ngOnInit(): void {
-    this.retrieveAnnualSavings();
+    this.retrieveXData();
+    this.retrieveYData();
+
+    this.annualSavingsForm = this.fb.group({
+      year: [''],
+      savings: ['', Validators.required]
+    });
   }
 
-  retrieveAnnualSavings(): void {
-    this.annualSavingsService.initDBPath();
-    this.annualSavingsService.getAll().valueChanges()
-    .subscribe((data) => { this.data = data; });
-    console.log(this.data);
-    // .pipe(
-    //   map(changes =>
-    //     changes.map(year =>
-    //       ({ key: year.payload.key, ...year.payload.val() })
-    //     )
-    //   )
-    // )
-    // .subscribe(data => {
-    //   this.annualSavings = data;
-    // });
+  retrieveXData(): any {
+    return this.annualSavingsList
+      .pipe(
+        map((actions) =>
+          actions.map((a) => {
+            const data = a.key;
+            return data;
+          })
+        )
+      )
+      .subscribe((data) => {
+        console.log(data);
+        this.barChartLabels = data;
+      });
+    }
+
+  retrieveYData(): any {
+    return this.annualSavingsList
+      .pipe(
+        map((actions) =>
+          actions.map((a) => {
+            const data = a.payload.node_.value_;
+            return data;
+          })
+        )
+      )
+      .subscribe((data) => {
+        console.log(data);
+        this.barChartData[0].data = data;
+
+      });
   }
+
+
 
 }
+
+
+// declare form and form inputs (value, label, etc)
+// button that call method inside class that does post to firebase
+
+// html needs form tag and formGroup and ngSubmit/(click)
+// formControlName for each input
+// getRawValue returns 1:1 representation of form model (play around with form values w/o affecting form)
+
