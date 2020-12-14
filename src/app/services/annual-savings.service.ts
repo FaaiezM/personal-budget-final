@@ -25,16 +25,18 @@ export class AnnualSavingsService {
     return this.annualSavingsRef;
   }
 
-  create(annualSavings: AnnualSavings): any {
-    return this.annualSavingsRef.push(annualSavings);
+  create(annualSavings: AnnualSavings) {
+    return this.annualSavingsRef.push(annualSavings).then(res => {
+      res.key;
+    });
   }
 
-  update(uid: string, value: any): Promise<void> {
-    return this.annualSavingsRef.update(uid, value);
+  update(key: string, value: any): Promise<void> {
+    return this.annualSavingsRef.update(key, value);
   }
 
-  delete(uid: string): Promise<void> {
-    return this.annualSavingsRef.remove(uid);
+  delete(key: string): Promise<void> {
+    return this.annualSavingsRef.remove(key);
   }
 
   deleteAll(): Promise<void> {

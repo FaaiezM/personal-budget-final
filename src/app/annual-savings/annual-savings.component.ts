@@ -15,10 +15,12 @@ import { Action } from '@ngrx/store';
   styleUrls: ['./annual-savings.component.scss'],
 })
 export class AnnualSavingsComponent implements OnInit {
-  annualSavingsList: Observable<any[]>;
+  annualSavingsValueList: Observable<any[]>;
+  annualSavingsSnapshotList: Observable<any[]>;
 
 
   annualSavingsForm: FormGroup;
+  removeItemForm: FormGroup;
 
   barChartOptions: ChartOptions = {
     responsive: true,
@@ -33,29 +35,58 @@ export class AnnualSavingsComponent implements OnInit {
 
   barChartData: ChartDataSets[] = [{ data: [], label: 'Amount Saved' }];
 
+  barChartIds: any[];
+
   constructor(private annualSavingsService: AnnualSavingsService, private fb: FormBuilder) {
     this.annualSavingsService = annualSavingsService;
-    this.annualSavingsList = this.annualSavingsService
+    this.annualSavingsSnapshotList = this.annualSavingsService
       .getAll()
       .snapshotChanges();
+    this.annualSavingsValueList = this.annualSavingsService
+      .getAll()
+      .valueChanges();
   }
 
-  ngOnInit(): void {
+  ngOnInit(): any {
+    this.retrieveUIDData();
     this.retrieveXData();
     this.retrieveYData();
 
     this.annualSavingsForm = this.fb.group({
       year: [''],
-      savings: ['', Validators.required]
+      savings: [''],
     });
+
+    this.removeItemForm = this.fb.group({
+      year: '',
+    });
+
   }
 
-  retrieveXData(): any {
-    return this.annualSavingsList
+  retrieveUIDData(): any {
+    return this.annualSavingsSnapshotList
       .pipe(
         map((actions) =>
           actions.map((a) => {
             const data = a.key;
+            console.log(a.key);
+            return data;
+          })
+        )
+      )
+      .subscribe((data) => {
+        console.log(data);
+        this.barChartIds = data;
+      });
+    }
+
+  retrieveXData(): any {
+    return this.annualSavingsValueList
+      .pipe(
+        map((actions) =>
+          actions.map((a) => {
+            const data = a.year;
+            console.log(a);
             return data;
           })
         )
@@ -67,11 +98,11 @@ export class AnnualSavingsComponent implements OnInit {
     }
 
   retrieveYData(): any {
-    return this.annualSavingsList
+    return this.annualSavingsValueList
       .pipe(
         map((actions) =>
           actions.map((a) => {
-            const data = a.payload.node_.value_;
+            const data = a.savings;
             return data;
           })
         )
@@ -83,7 +114,23 @@ export class AnnualSavingsComponent implements OnInit {
       });
   }
 
+  submitForm() {
+    const value = this.annualSavingsForm.getRawValue();
+    console.log(value);
+    this.annualSavingsService.create(value)
+    .then((res) => {
+      console.log(res);
+    }
+    )
+  };
 
+  removeItem() {
+    const value = this.removeItemForm.getRawValue();
+    if (value.year == '') return;
+    var index = this.barChartLabels.indexOf(value.year);
+    var key = this.barChartIds[index];
+    this.annualSavingsService.delete(key);
+  }
 
 }
 

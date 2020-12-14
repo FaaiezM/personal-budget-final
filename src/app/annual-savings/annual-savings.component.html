@@ -10,19 +10,33 @@
 </div>
 
 <!-- Submit Data Form-->
-<form [formGroup]="annualSavingsForm">
-    <mat-label>Add</mat-label>
+<form [formGroup]="annualSavingsForm" (ngSubmit)="submitForm()">
     <mat-form-field>
         <mat-label>Year</mat-label>
-        <input matInput formControlName="year" required>
+        <input matInput type="number" formControlName="year" required>
     </mat-form-field>
 
     <mat-form-field>
         <mat-label>Amount Saved</mat-label>
-        <input matInput formControlName="savings" required>
+        <input matInput type="number" formControlName="savings" required>
     </mat-form-field>
+
+    <button mat-raised-button color="primary">
+        Add
+      </button>
+
 </form>
 
+<form [formGroup]="removeItemForm" (ngSubmit)="removeItem()">
+    <mat-form-field>
+        <mat-label>Year</mat-label>
+        <input matInput type="number" formControlName="year">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary">
+        Remove
+      </button>
+</form>
 
 
 <!-- <pre>
