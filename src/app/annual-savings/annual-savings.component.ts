@@ -6,8 +6,8 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AnnualSavings } from '../models/annual-savings';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { Action } from '@ngrx/store';
+import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
+
 
 @Component({
   selector: 'pb-annual-savings',
@@ -53,7 +53,7 @@ export class AnnualSavingsComponent implements OnInit {
     this.retrieveYData();
 
     this.annualSavingsForm = this.fb.group({
-      year: [''],
+      year: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(4), Validators.maxLength(4)]],
       savings: [''],
     });
 
@@ -115,21 +115,29 @@ export class AnnualSavingsComponent implements OnInit {
   }
 
   submitForm() {
+    if (this.annualSavingsForm.invalid) {
+      return;
+    }
     const value = this.annualSavingsForm.getRawValue();
     console.log(value);
     this.annualSavingsService.create(value)
+    // Why is this undefined?
     .then((res) => {
       console.log(res);
     }
     )
+    this.annualSavingsForm.reset();
   };
 
   removeItem() {
     const value = this.removeItemForm.getRawValue();
-    if (value.year == '') return;
+    if (this.removeItemForm.invalid) {
+      return;
+    }
     var index = this.barChartLabels.indexOf(value.year);
     var key = this.barChartIds[index];
     this.annualSavingsService.delete(key);
+    this.removeItemForm.reset();
   }
 
 }
