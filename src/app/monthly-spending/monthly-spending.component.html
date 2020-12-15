@@ -20,17 +20,18 @@
         <mat-form-field appearance="fill">
           <mat-label>Category</mat-label>
           <input matInput type="text" formControlName="category" required />
-          <div
-            *ngIf="monthlySpendingForm.controls['category'].hasError('pattern')"
-          >
-            <p>Category name must be a word</p>
-          </div>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Spending</mat-label>
           <input matInput type="number" formControlName="spending" required />
         </mat-form-field>
+
+        <div
+            *ngIf="monthlySpendingForm.controls['category'].hasError('pattern')"
+          >
+            <p>Category name must be a word</p>
+          </div>
 
         <mat-card-actions>
           <button
