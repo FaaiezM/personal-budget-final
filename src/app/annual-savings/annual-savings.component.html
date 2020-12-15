@@ -13,46 +13,54 @@
       </canvas>
     </div>
 
+    <!-- Submit Data Form-->
+    <form [formGroup]="annualSavingsForm" (ngSubmit)="submitForm()">
+      <mat-form-field appearance="fill">
+        <mat-label>Year</mat-label>
+        <input matInput type="text" formControlName="year" required />
+      </mat-form-field>
 
-  <!-- Submit Data Form-->
-  <form [formGroup]="annualSavingsForm" (ngSubmit)="submitForm()">
-    <mat-form-field appearance="fill">
-      <mat-label>Year</mat-label>
-      <input matInput type="text" formControlName="year" required/>
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Amount Saved</mat-label>
+        <input matInput type="number" formControlName="savings" required />
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Amount Saved</mat-label>
-      <input matInput type="number" formControlName="savings" required/>
-    </mat-form-field>
-
-    <!-- Custom error messages if you want to include them -->
-    <div *ngIf="annualSavingsForm.controls['year'].hasError('minlength')">
+      <!-- Custom error messages if you want to include them -->
+      <div *ngIf="annualSavingsForm.controls['year'].hasError('minlength')">
         <p>Year must be 4 digits.</p>
       </div>
 
-    <mat-card-actions>
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="!this.annualSavingsForm.valid"
-    >
-      Add
-    </button>
-</mat-card-actions>
-  </form>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!this.annualSavingsForm.valid"
+        >
+          Add
+        </button>
+      </mat-card-actions>
+    </form>
 
-  <form [formGroup]="removeItemForm" (ngSubmit)="removeItem()">
-    <mat-form-field appearance="fill">
-      <mat-label>Year</mat-label>
-      <input matInput type="number" formControlName="year" required />
-    </mat-form-field>
+    <form [formGroup]="removeItemForm" (ngSubmit)="removeItem()">
+      <mat-form-field appearance="fill">
+        <mat-label>Year</mat-label>
+        <input matInput type="text" formControlName="year" required />
+      </mat-form-field>
 
-    <mat-card-actions>
-    <button mat-raised-button color="warn" [disabled]="!removeItemForm.valid">
-      Remove
-    </button>
-</mat-card-actions>
-  </form>
-</mat-card-content>
+      <!-- Custom error messages if you want to include them -->
+      <div *ngIf="removeItemForm.controls['year'].hasError('minlength')">
+        <p>Year must be 4 digits.</p>
+      </div>
+
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="warn"
+          [disabled]="!removeItemForm.valid"
+        >
+          Remove
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
 </mat-card>

@@ -114,14 +114,12 @@ export class AnnualSavingsComponent implements OnInit {
   }
 
   submitForm() {
-
     const value = this.annualSavingsForm.getRawValue();
     if (this.annualSavingsForm.invalid) {
       return;
     }
     console.log(value);
     this.annualSavingsService.create(value)
-    // Why is this undefined?
     .then((res) => {
       console.log(res);
     }
@@ -141,12 +139,3 @@ export class AnnualSavingsComponent implements OnInit {
   }
 
 }
-
-
-// declare form and form inputs (value, label, etc)
-// button that call method inside class that does post to firebase
-
-// html needs form tag and formGroup and ngSubmit/(click)
-// formControlName for each input
-// getRawValue returns 1:1 representation of form model (play around with form values w/o affecting form)
-
