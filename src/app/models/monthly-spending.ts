@@ -1,5 +1,6 @@
-export default class MonthlySpending {
-    budget: number;
+export interface MonthlySpending {
+    key: string;
+    spending: number;
     color: string;
-    title: string;
+    category: string;
 }

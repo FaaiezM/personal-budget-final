@@ -1,5 +1,7 @@
-<div class="chartjs-container">
-    <canvas
+<mat-card class="monthly-budget-card">
+  <mat-card-content>
+    <div class="chartjs-container">
+      <canvas
         baseChart
         [data]="pieChartData"
         [labels]="pieChartLabels"
@@ -7,35 +9,52 @@
         [options]="pieChartOptions"
         [plugins]="pieChartPlugins"
         [colors]="pieChartColors"
-        [legend]="pieChartLegend">
-    </canvas>
-</div>
+        [legend]="pieChartLegend"
+      >
+      </canvas>
+    </div>
 
-<!-- Submit Data Form-->
-<form [formGroup]="monthlyBudgetForm" (ngSubmit)="submitForm()">
-    <mat-form-field>
+    <!-- Submit Data Form-->
+    <form [formGroup]="monthlyBudgetForm" (ngSubmit)="submitForm()">
+      <mat-form-field appearance="fill">
         <mat-label>Category</mat-label>
-        <input matInput type="text" formControlName="category" required>
-    </mat-form-field>
+        <input matInput type="text" formControlName="category" required />
+      </mat-form-field>
 
-    <mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Budget</mat-label>
-        <input matInput type="number" formControlName="budget" required>
-    </mat-form-field>
+        <input matInput type="number" formControlName="budget" required />
+      </mat-form-field>
 
-    <button mat-raised-button color="primary">
-        Add
-      </button>
+      <div *ngIf="monthlyBudgetForm.controls['category'].hasError('pattern')">
+        <p>Category name must be a word</p>
+      </div>
 
-</form>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!this.monthlyBudgetForm.valid"
+        >
+          Add
+        </button>
+      </mat-card-actions>
+    </form>
 
-<form [formGroup]="removeItemForm" (ngSubmit)="removeItem()">
-    <mat-form-field>
+    <form [formGroup]="removeItemForm" (ngSubmit)="removeItem()">
+      <mat-form-field appearance="fill">
         <mat-label>Category</mat-label>
-        <input matInput type="text" formControlName="category" required>
-    </mat-form-field>
-
-    <button mat-raised-button color="primary">
-        Remove
-      </button>
-</form>
+        <input matInput type="text" formControlName="category" required />
+      </mat-form-field>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!removeItemForm.valid"
+        >
+          Remove
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

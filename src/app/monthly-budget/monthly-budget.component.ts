@@ -1,12 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import { Component, OnInit} from '@angular/core';
+import { ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { MonthlyBudgetService } from '../services/monthly-budget.service';
+import { MonthlyBudgetService } from './../services/monthly-budget.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { MonthlyBudget } from '../models/monthly-budget';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'pb-monthly-budget',
@@ -20,7 +18,6 @@ export class MonthlyBudgetComponent implements OnInit {
 
   monthlyBudgetForm: FormGroup;
   removeItemForm: FormGroup;
-
 
   pieChartOptions: ChartOptions = {
     responsive: true,
@@ -50,7 +47,7 @@ export class MonthlyBudgetComponent implements OnInit {
 
   pieChartColors = [
     {
-      backgroundColor: ['rgba(255,0,0,0.3)', 'rgba(0,255,0,0.3)', 'rgba(0,0,255,0.3)'],
+      backgroundColor: ['green'],
     },
   ];
 
@@ -68,16 +65,19 @@ export class MonthlyBudgetComponent implements OnInit {
     this.retrieveUIDData();
     this.retrieveXData();
     this.retrieveYData();
+    this.retrieveColorData();
 
     this.monthlyBudgetForm = this.fb.group({
-      category: ['',[Validators.required, Validators.minLength(4),Validators.maxLength(4), Validators.pattern("^[0-9]*$")]],
+      category: ['',[Validators.required, Validators.minLength(1), Validators.pattern("^[a-zA-Z]+$")]],
       budget: [''],
+      color: ['']
     });
+
+    console.log(this.monthlyBudgetForm);
 
     this.removeItemForm = this.fb.group({
       category: '',
     });
-
   }
 
   retrieveUIDData(): any {
@@ -127,25 +127,54 @@ export class MonthlyBudgetComponent implements OnInit {
       .subscribe((data) => {
         console.log(data);
         this.pieChartData = data;
+      });
+  }
 
+  retrieveColorData(): any {
+    return this.monthlyBudgetValueList
+      .pipe(
+        map((actions) =>
+          actions.map((a) => {
+            const data = a.color;
+            console.log(a.color);
+            return data;
+          })
+        )
+      )
+      .subscribe((data) => {
+        console.log(data);
+        this.pieChartColors[0].backgroundColor = data;
       });
   }
 
   submitForm() {
+    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    this.monthlyBudgetForm.patchValue({
+      color: randomColor
+    })
+
     const value = this.monthlyBudgetForm.getRawValue();
-    console.log(value);
+    if (this.monthlyBudgetForm.invalid) {
+      return;
+    }
+
     this.monthlyBudgetService.create(value)
     .then((res) => {
       console.log(res);
     }
     )
+    this.monthlyBudgetForm.reset();
   };
 
   removeItem() {
     const value = this.removeItemForm.getRawValue();
-    if (value.category == '') return;
-    var index = this.pieChartLabels.indexOf(value.category);
-    var key = this.pieChartIds[index];
+    if (this.removeItemForm.invalid) {
+      return;
+    }
+    const index = this.pieChartLabels.indexOf(value.category);
+    const key = this.pieChartIds[index];
     this.monthlyBudgetService.delete(key);
+    this.removeItemForm.reset();
+
   }
 }
