@@ -1,5 +1,5 @@
 export interface AnnualSavings {
     key: string;
-    year: number;
+    year: string;
     savings: number;
   }

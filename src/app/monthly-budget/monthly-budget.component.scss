@@ -1,0 +1,22 @@
+// :host {
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+
+//   &>div{
+//     flex: 1;
+//   }
+// }
+
+p {
+  color: red;
+}
+
+mat-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 500px;
+}
+
+

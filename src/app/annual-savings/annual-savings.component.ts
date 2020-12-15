@@ -1,12 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { AnnualSavingsService } from '../services/annual-savings.service';
+import { AnnualSavingsService } from './../services/annual-savings.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { AnnualSavings } from '../models/annual-savings';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { FormGroup, FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 
 @Component({
@@ -53,13 +51,14 @@ export class AnnualSavingsComponent implements OnInit {
     this.retrieveYData();
 
     this.annualSavingsForm = this.fb.group({
-      year: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(4), Validators.maxLength(4)]],
+      year: ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(4), Validators.maxLength(4)])],
       savings: [''],
     });
 
     this.removeItemForm = this.fb.group({
       year: '',
     });
+
 
   }
 
@@ -115,10 +114,11 @@ export class AnnualSavingsComponent implements OnInit {
   }
 
   submitForm() {
+
+    const value = this.annualSavingsForm.getRawValue();
     if (this.annualSavingsForm.invalid) {
       return;
     }
-    const value = this.annualSavingsForm.getRawValue();
     console.log(value);
     this.annualSavingsService.create(value)
     // Why is this undefined?
