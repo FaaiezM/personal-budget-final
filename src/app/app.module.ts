@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { ChartsModule } from "ng2-charts"
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,9 +16,6 @@ import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { AnnualSavingsComponent } from './annual-savings/annual-savings.component';
-import { MonthlyBudgetComponent } from './monthly-budget/monthly-budget.component';
-import { MonthlySpendingComponent } from './monthly-spending/monthly-spending.component';
 
 import { AuthService } from './auth/auth.service';
 import { environment } from '../environments/environment';
@@ -28,14 +25,10 @@ import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
-    AnnualSavingsComponent,
-    MonthlyBudgetComponent,
-    MonthlySpendingComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ChartsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFireDatabaseModule,

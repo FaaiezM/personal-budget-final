@@ -14,11 +14,7 @@ export class AnnualSavingsService {
   annualSavingsRef: AngularFireList<AnnualSavings> = null;
 
   constructor(private db: AngularFireDatabase, private authService: AuthService) {
-    this.authService = authService;
     this.annualSavingsRef = this.db.list(this.dbPath);
-    console.log(this.userID);
-    this.db = db;
-    console.log(this.dbPath);
   }
 
   public getAll(): AngularFireList<AnnualSavings> {

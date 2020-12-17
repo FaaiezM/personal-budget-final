@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { AnnualSavingsService } from './../services/annual-savings.service';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { AnnualSavingsService } from './../../../services/annual-savings.service';
+import { map, takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 
@@ -11,8 +11,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   selector: 'pb-annual-savings',
   templateUrl: './annual-savings.component.html',
   styleUrls: ['./annual-savings.component.scss'],
+  providers: [AnnualSavingsService]
 })
-export class AnnualSavingsComponent implements OnInit {
+export class AnnualSavingsComponent implements OnInit, OnDestroy {
   annualSavingsValueList: Observable<any[]>;
   annualSavingsSnapshotList: Observable<any[]>;
 
@@ -34,6 +35,8 @@ export class AnnualSavingsComponent implements OnInit {
   barChartData: ChartDataSets[] = [{ data: [], label: 'Amount Saved' }];
 
   barChartIds: any[];
+
+  private _$destroy: Subject<boolean> = new Subject();
 
   constructor(private annualSavingsService: AnnualSavingsService, private fb: FormBuilder) {
     this.annualSavingsService = annualSavingsService;
@@ -62,16 +65,21 @@ export class AnnualSavingsComponent implements OnInit {
 
   }
 
+  public ngOnDestroy(){
+    this._$destroy.next();
+    this._$destroy.complete();
+  }
+
   retrieveUIDData(): any {
     return this.annualSavingsSnapshotList
       .pipe(
         map((actions) =>
           actions.map((a) => {
             const data = a.key;
-            console.log(a.key);
             return data;
           })
-        )
+        ),
+        takeUntil(this._$destroy)
       )
       .subscribe((data) => {
         console.log(data);
@@ -85,10 +93,10 @@ export class AnnualSavingsComponent implements OnInit {
         map((actions) =>
           actions.map((a) => {
             const data = a.year;
-            console.log(a);
             return data;
           })
-        )
+        ),
+        takeUntil(this._$destroy)
       )
       .subscribe((data) => {
         console.log(data);
@@ -104,7 +112,8 @@ export class AnnualSavingsComponent implements OnInit {
             const data = a.savings;
             return data;
           })
-        )
+        ),
+        takeUntil(this._$destroy)
       )
       .subscribe((data) => {
         console.log(data);
@@ -118,7 +127,6 @@ export class AnnualSavingsComponent implements OnInit {
     if (this.annualSavingsForm.invalid) {
       return;
     }
-    console.log(value);
     this.annualSavingsService.create(value)
     .then((res) => {
       console.log(res);

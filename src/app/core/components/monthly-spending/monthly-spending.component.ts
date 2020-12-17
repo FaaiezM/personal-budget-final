@@ -1,22 +1,23 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { MonthlyBudgetService } from './../services/monthly-budget.service';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { MonthlySpendingService } from './../../../services/monthly-spending.service';
+import { map, takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'pb-monthly-budget',
-  templateUrl: './monthly-budget.component.html',
-  styleUrls: ['./monthly-budget.component.scss']
+  selector: 'pb-monthly-spending',
+  templateUrl: './monthly-spending.component.html',
+  styleUrls: ['./monthly-spending.component.scss'],
+  providers: [MonthlySpendingService]
 })
-export class MonthlyBudgetComponent implements OnInit {
-  monthlyBudgetValueList: Observable<any[]>;
-  monthlyBudgetSnapshotList: Observable<any[]>;
+export class MonthlySpendingComponent implements OnInit, OnDestroy {
+  monthlySpendingValueList: Observable<any[]>;
+  monthlySpendingSnapshotList: Observable<any[]>;
   pieChartIds: any[];
 
-  monthlyBudgetForm: FormGroup;
+  monthlySpendingForm: FormGroup;
   removeItemForm: FormGroup;
 
   pieChartOptions: ChartOptions = {
@@ -47,16 +48,18 @@ export class MonthlyBudgetComponent implements OnInit {
 
   pieChartColors = [
     {
-      backgroundColor: ['green'],
+      backgroundColor: [],
     },
   ];
 
-  constructor(private monthlyBudgetService: MonthlyBudgetService, private fb: FormBuilder) {
-    this.monthlyBudgetService = monthlyBudgetService;
-    this.monthlyBudgetSnapshotList = this.monthlyBudgetService
+  private _$destroy: Subject<boolean> = new Subject();
+
+  constructor(private monthlySpendingService: MonthlySpendingService, private fb: FormBuilder) {
+    this.monthlySpendingService = monthlySpendingService;
+    this.monthlySpendingSnapshotList = this.monthlySpendingService
       .getAll()
       .snapshotChanges();
-    this.monthlyBudgetValueList = this.monthlyBudgetService
+    this.monthlySpendingValueList = this.monthlySpendingService
       .getAll()
       .valueChanges();
   }
@@ -67,29 +70,32 @@ export class MonthlyBudgetComponent implements OnInit {
     this.retrieveYData();
     this.retrieveColorData();
 
-    this.monthlyBudgetForm = this.fb.group({
+    this.monthlySpendingForm = this.fb.group({
       category: ['',[Validators.required, Validators.minLength(1), Validators.pattern("^[a-zA-Z]+$")]],
-      budget: [''],
+      spending: [''],
       color: ['']
     });
-
-    console.log(this.monthlyBudgetForm);
 
     this.removeItemForm = this.fb.group({
       category: '',
     });
   }
 
+  public ngOnDestroy(){
+    this._$destroy.next();
+    this._$destroy.complete();
+  }
+
   retrieveUIDData(): any {
-    return this.monthlyBudgetSnapshotList
+    return this.monthlySpendingSnapshotList
       .pipe(
         map((actions) =>
           actions.map((a) => {
             const data = a.key;
-            console.log(a.key);
             return data;
           })
-        )
+        ),
+        takeUntil(this._$destroy)
       )
       .subscribe((data) => {
         console.log(data);
@@ -98,15 +104,15 @@ export class MonthlyBudgetComponent implements OnInit {
     }
 
   retrieveXData(): any {
-    return this.monthlyBudgetValueList
+    return this.monthlySpendingValueList
       .pipe(
         map((actions) =>
           actions.map((a) => {
             const data = a.category;
-            console.log(a);
             return data;
           })
-        )
+        ),
+        takeUntil(this._$destroy)
       )
       .subscribe((data) => {
         console.log(data);
@@ -115,14 +121,15 @@ export class MonthlyBudgetComponent implements OnInit {
     }
 
   retrieveYData(): any {
-    return this.monthlyBudgetValueList
+    return this.monthlySpendingValueList
       .pipe(
         map((actions) =>
           actions.map((a) => {
-            const data = a.budget;
+            const data = a.spending;
             return data;
           })
-        )
+        ),
+        takeUntil(this._$destroy)
       )
       .subscribe((data) => {
         console.log(data);
@@ -131,15 +138,15 @@ export class MonthlyBudgetComponent implements OnInit {
   }
 
   retrieveColorData(): any {
-    return this.monthlyBudgetValueList
+    return this.monthlySpendingValueList
       .pipe(
         map((actions) =>
           actions.map((a) => {
             const data = a.color;
-            console.log(a.color);
             return data;
           })
-        )
+        ),
+        takeUntil(this._$destroy)
       )
       .subscribe((data) => {
         console.log(data);
@@ -149,21 +156,21 @@ export class MonthlyBudgetComponent implements OnInit {
 
   submitForm() {
     const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-    this.monthlyBudgetForm.patchValue({
+    this.monthlySpendingForm.patchValue({
       color: randomColor
     })
 
-    const value = this.monthlyBudgetForm.getRawValue();
-    if (this.monthlyBudgetForm.invalid) {
+    const value = this.monthlySpendingForm.getRawValue();
+    if (this.monthlySpendingForm.invalid) {
       return;
     }
 
-    this.monthlyBudgetService.create(value)
+    this.monthlySpendingService.create(value)
     .then((res) => {
       console.log(res);
     }
     )
-    this.monthlyBudgetForm.reset();
+    this.monthlySpendingForm.reset();
   };
 
   removeItem() {
@@ -173,8 +180,7 @@ export class MonthlyBudgetComponent implements OnInit {
     }
     const index = this.pieChartLabels.indexOf(value.category);
     const key = this.pieChartIds[index];
-    this.monthlyBudgetService.delete(key);
+    this.monthlySpendingService.delete(key);
     this.removeItemForm.reset();
-
   }
 }

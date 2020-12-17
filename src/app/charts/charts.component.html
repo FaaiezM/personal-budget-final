@@ -1,0 +1,41 @@
+
+  <!-- Tabs with Charts -->
+  <header *ngIf="authService.user | async">
+
+    <h1>Welcome: {{ (authService.user | async)?.email }}!</h1>
+
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="authService.logout()"
+      [routerLink]="['']"
+    >
+      Logout
+    </button>
+  </header>
+
+  <mat-tab-group
+    color="accent"
+    backgroundColor="primary"
+    mat-align-tabs="center"
+  >
+    <mat-tab label="Monthly Budget">
+      <ng-template matTabContent>
+        <pb-monthly-budget> </pb-monthly-budget>
+      </ng-template>
+    ></mat-tab>
+
+    <mat-tab label="Monthly Spending">
+      <ng-template matTabContent>
+        <pb-monthly-spending> </pb-monthly-spending>
+      </ng-template>
+
+    ></mat-tab>
+
+    <mat-tab label="Annual Savings">
+      <ng-template matTabContent>
+        <pb-annual-savings></pb-annual-savings>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+

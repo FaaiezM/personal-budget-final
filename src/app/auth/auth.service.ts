@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import firebase from 'firebase/app';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
+import firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +18,7 @@ export class AuthService {
     return localStorage.getItem('uid');
   }
 
-  constructor(private firebaseAuth: AngularFireAuth) {
+  constructor(private firebaseAuth: AngularFireAuth, private router: Router) {
     this.user = firebaseAuth.authState;
   }
 
@@ -24,12 +27,15 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then((value) => {
         console.log('Success!', value);
+        this.uid = value.user.uid;
         localStorage.setItem("uid", value.user.uid);
+        this.router.navigate(['charts']);
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
         this.errMsg = err.message;
       });
+      console.log(this.firebaseAuth.currentUser);
   }
 
   login(email: string, password: string) {
@@ -39,6 +45,7 @@ export class AuthService {
         console.log(value);
         this.uid = value.user.uid;
         localStorage.setItem("uid", value.user.uid);
+        this.router.navigate(['charts']);
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
@@ -49,6 +56,7 @@ export class AuthService {
   logout() {
     this.firebaseAuth.signOut();
     localStorage.clear();
+    this.router.navigate(['login']);
   }
 
   get isAuthenticated(): boolean {
