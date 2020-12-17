@@ -24,6 +24,7 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then((value) => {
         console.log('Success!', value);
+        localStorage.setItem("uid", value.user.uid);
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
